@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>Lockin - データで見える本当の習慣。</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;600;700;900&family=Noto+Serif+JP:ital,wght@0,400;1,400&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body {
+    width: 100%; height: 100%;
+    background: #EAEEF2;
+    display: flex; justify-content: center; align-items: flex-start;
+    overflow: hidden;
+  }
+  #card {
+    width: 390px; height: 844px;
+    background: #EAEEF2;
+    font-family: 'Noto Sans JP', sans-serif;
+    display: flex; flex-direction: column; align-items: flex-start;
+    overflow: hidden; position: relative; flex-shrink: 0;
+    padding: 48px 28px 0;
+    transform-origin: top center;
+  }
+  .headline {
+    font-size: 40px; font-weight: 900; color: #111318;
+    letter-spacing: -2px; line-height: 1.12; white-space: pre-line;
+  }
+  .subtitle {
+    font-size: 14px; font-weight: 400; color: #7B8494;
+    margin-top: 10px; letter-spacing: 0.1px;
+  }
+  .phone-wrap {
+    margin-top: 26px; width: 100%; display: flex; justify-content: center;
+  }
+  .phone-outer {
+    width: 252px; height: 530px;
+    background: #fff; border-radius: 44px;
+    border: 7px solid #D0D5DD;
+    box-shadow: 0 28px 72px rgba(0,0,0,0.16), 0 8px 20px rgba(0,0,0,0.08);
+    overflow: hidden; display: flex; flex-direction: column;
+    flex-shrink: 0;
+  }
+  .dynamic-island {
+    width: 100px; height: 30px;
+    background: #111318; border-radius: 0 0 20px 20px;
+    margin: 0 auto; flex-shrink: 0;
+  }
+  .phone-screen {
+    background: #111318; flex: 1;
+    display: flex; flex-direction: column;
+    overflow: hidden; padding: 12px 14px 12px;
+  }
+
+  /* Screen title */
+  .screen-hdr {
+    display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;
+  }
+  .screen-title { font-size: 14px; font-weight: 700; color: #F0F2F5; }
+  .period-chip {
+    font-size: 9px; color: #4A9EFF;
+    background: rgba(74,158,255,0.12); padding: 3px 8px; border-radius: 5px;
+  }
+
+  /* Summary cards row */
+  .summary-row { display: flex; gap: 7px; margin-bottom: 12px; }
+  .sum-card {
+    flex: 1; background: #1C2027; border-radius: 10px; padding: 9px 10px;
+  }
+  .sum-label { font-size: 8px; color: #7B8494; margin-bottom: 4px; line-height: 1.4; }
+  .sum-val { font-size: 15px; font-weight: 700; color: #F0F2F5; }
+  .sum-sub { font-size: 8px; color: #7B8494; margin-top: 1px; }
+
+  /* Bar chart card */
+  .chart-card {
+    background: #1C2027; border-radius: 12px; padding: 10px 12px; margin-bottom: 11px;
+  }
+  .chart-label { font-size: 9px; color: #7B8494; margin-bottom: 8px; }
+  .bar-chart {
+    display: flex; align-items: flex-end; gap: 5px; height: 64px; margin-bottom: 5px;
+  }
+  .bar-col { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 4px; height: 100%; justify-content: flex-end; }
+  .bar { width: 100%; border-radius: 3px 3px 0 0; }
+  .bar-day { font-size: 8px; color: #7B8494; }
+  .bar-day.today { color: #FF3333; font-weight: 700; }
+
+  /* Data: Mon:45 Tue:60 Wed:30 Thu:80 Fri:50 Sat:25 Sun:90 → max=90 → heights scaled to 64px */
+  /* Mon: 45/90*64=32  Tue: 60/90*64=43  Wed: 30/90*64=21 */
+  /* Thu: 80/90*64=57  Fri: 50/90*64=36  Sat: 25/90*64=18  Sun: 90/90*64=64 */
+
+  /* Streak card */
+  .streak-card {
+    background: rgba(255,179,0,0.10); border: 1px solid rgba(255,179,0,0.25);
+    border-radius: 10px; padding: 10px 13px;
+    display: flex; align-items: center; gap: 10px;
+  }
+  .streak-icon { font-size: 22px; }
+  .streak-info { flex: 1; }
+  .streak-val { font-size: 16px; font-weight: 700; color: #FFB300; }
+  .streak-label { font-size: 9px; color: #7B8494; margin-top: 2px; }
+
+  /* Bottom nav */
+  .bottom-nav {
+    background: #1C2027;
+    display: flex; justify-content: space-around; align-items: center;
+    padding: 8px 0 5px; flex-shrink: 0;
+  }
+  .nav-item { display: flex; flex-direction: column; align-items: center; gap: 2px; }
+  .nav-icon { font-size: 14px; }
+  .nav-txt { font-size: 8px; color: #7B8494; }
+  .nav-txt.active { color: #F0F2F5; font-weight: 600; }
+</style>
+</head>
+<body>
+<div id="card">
+  <div class="headline">データで見える&#10;本当の習慣。</div>
+  <div class="subtitle">週次グラフ・アプリ別使用量</div>
+  <div class="phone-wrap">
+    <div class="phone-outer">
+      <div class="dynamic-island"></div>
+      <div class="phone-screen">
+        <div class="screen-hdr">
+          <div class="screen-title">記録</div>
+          <div class="period-chip">今週 ▾</div>
+        </div>
+
+        <!-- Summary cards -->
+        <div class="summary-row">
+          <div class="sum-card">
+            <div class="sum-label">今週のブロック時間</div>
+            <div class="sum-val" style="color:#1DB954;">3h 45m</div>
+          </div>
+          <div class="sum-card">
+            <div class="sum-label">合計セッション</div>
+            <div class="sum-val">12回</div>
+          </div>
+        </div>
+
+        <!-- Bar chart -->
+        <div class="chart-card">
+          <div class="chart-label">1日あたりの使用時間（分）</div>
+          <div class="bar-chart">
+            <!-- Mon 45 → 32px gray -->
+            <div class="bar-col">
+              <div class="bar" style="height:32px; background:#2E3440;"></div>
+              <div class="bar-day">月</div>
+            </div>
+            <!-- Tue 60 → 43px gray -->
+            <div class="bar-col">
+              <div class="bar" style="height:43px; background:#2E3440;"></div>
+              <div class="bar-day">火</div>
+            </div>
+            <!-- Wed 30 → 21px gray -->
+            <div class="bar-col">
+              <div class="bar" style="height:21px; background:#2E3440;"></div>
+              <div class="bar-day">水</div>
+            </div>
+            <!-- Thu 80 → 57px gray -->
+            <div class="bar-col">
+              <div class="bar" style="height:57px; background:#2E3440;"></div>
+              <div class="bar-day">木</div>
+            </div>
+            <!-- Fri 50 → 36px gray -->
+            <div class="bar-col">
+              <div class="bar" style="height:36px; background:#2E3440;"></div>
+              <div class="bar-day">金</div>
+            </div>
+            <!-- Sat 25 → 18px gray -->
+            <div class="bar-col">
+              <div class="bar" style="height:18px; background:#2E3440;"></div>
+              <div class="bar-day">土</div>
+            </div>
+            <!-- Sun 90 → 64px RED (today) -->
+            <div class="bar-col">
+              <div class="bar" style="height:64px; background:#FF3333; box-shadow:0 0 8px rgba(255,51,51,0.4);"></div>
+              <div class="bar-day today">日</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Streak card -->
+        <div class="streak-card">
+          <div class="streak-icon">🔥</div>
+          <div class="streak-info">
+            <div class="streak-val">7日連続</div>
+            <div class="streak-label">現在のストリーク — 継続中！</div>
+          </div>
+        </div>
+      </div>
+      <div class="bottom-nav">
+        <div class="nav-item"><div class="nav-icon">🏠</div><div class="nav-txt">ホーム</div></div>
+        <div class="nav-item"><div class="nav-icon">🔒</div><div class="nav-txt">ブロック</div></div>
+        <div class="nav-item"><div class="nav-icon">📊</div><div class="nav-txt active">記録</div></div>
+        <div class="nav-item"><div class="nav-icon">⚙️</div><div class="nav-txt">設定</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+  const card = document.getElementById('card');
+  const scale = Math.min(window.innerWidth / 390, window.innerHeight / 844);
+  card.style.transform = 'scale(' + scale + ')';
+  if (window.innerHeight / 844 > window.innerWidth / 390) {
+    card.style.marginTop = ((window.innerHeight - 844 * scale) / 2) + 'px';
+  }
+</script>
+</body>
+</html>

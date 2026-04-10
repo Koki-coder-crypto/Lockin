@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">BLOCK</string>
+    <string name="accessibility_service_description">BLOCKがブロック対象アプリの起動を検知して画面を切り替えます。データは外部送信されません。</string>
+</resources>

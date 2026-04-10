@@ -1,0 +1,142 @@
+workflows:
+
+  # ──────────────────────────────────────────────────────────
+  # iOS ビルド（App Store Connect 用）
+  # ──────────────────────────────────────────────────────────
+  ios-release:
+    name: iOS Release
+    max_build_duration: 60
+    instance_type: mac_mini_m2
+
+    environment:
+      flutter: stable
+      xcode: latest
+      cocoapods: default
+
+      # Codemagic UI で設定する環境変数
+      vars:
+        BUNDLE_ID: "com.lockin.app"
+        APP_STORE_APPLE_ID: $APP_STORE_APPLE_ID       # App Store Connect App ID
+        REVENUECAT_IOS_KEY: $REVENUECAT_IOS_KEY
+
+      # Codemagic UI の "Code Signing" で設定
+      ios_signing:
+        distribution_type: app_store
+        bundle_identifier: com.lockin.app
+
+    scripts:
+      - name: Set RevenueCat key
+        script: |
+          grep -rl "YOUR_REVENUECAT_IOS_KEY" lib/ | xargs sed -i "s/YOUR_REVENUECAT_IOS_KEY/$REVENUECAT_IOS_KEY/g" || true
+
+      - name: Get Flutter dependencies
+        script: flutter pub get
+
+      - name: Generate app icon
+        script: dart run flutter_launcher_icons
+
+      - name: Install CocoaPods
+        script: |
+          cd ios && pod install --repo-update
+
+      - name: Build iOS (release)
+        script: |
+          flutter build ipa --release \
+            --export-options-plist=/Users/builder/export_options.plist
+
+    artifacts:
+      - build/ios/ipa/*.ipa
+      - /tmp/xcodebuild_logs/*.log
+
+    publishing:
+      app_store_connect:
+        api_key: $APP_STORE_CONNECT_PRIVATE_KEY
+        key_id: $APP_STORE_CONNECT_KEY_IDENTIFIER
+        issuer_id: $APP_STORE_CONNECT_ISSUER_ID
+        submit_to_testflight: true
+        beta_groups:
+          - "Internal Testers"
+
+  # ──────────────────────────────────────────────────────────
+  # 開発用ビルド（iOS のみ）
+  # ──────────────────────────────────────────────────────────
+  dev-build:
+    name: Dev Build (iOS)
+    max_build_duration: 40
+    instance_type: mac_mini_m2
+
+    triggering:
+      events:
+        - push
+      branch_patterns:
+        - pattern: "main"
+          include: true
+        - pattern: "develop"
+          include: true
+
+    environment:
+      flutter: stable
+      xcode: latest
+
+    scripts:
+      - name: Get Flutter dependencies
+        script: flutter pub get
+
+      - name: Flutter analyze
+        script: flutter analyze --no-fatal-infos
+
+      - name: Flutter test
+        script: flutter test
+
+      - name: Build iOS (debug, no signing)
+        script: |
+          flutter build ios --debug --no-codesign
+
+    artifacts:
+      - build/ios/iphoneos/Runner.app
+
+  # ──────────────────────────────────────────────────────────
+  # Android ビルド（Google Play 用）
+  # ──────────────────────────────────────────────────────────
+  android-release:
+    name: Android Release
+    max_build_duration: 60
+    instance_type: linux_x2
+
+    environment:
+      flutter: stable
+
+      # Codemagic UI で設定する環境変数
+      vars:
+        REVENUECAT_ANDROID_KEY: $REVENUECAT_ANDROID_KEY
+
+      # Codemagic UI の "Code Signing" で設定
+      android_signing:
+        - lockin_keystore
+
+    scripts:
+      - name: Set RevenueCat key
+        script: |
+          grep -rl "YOUR_REVENUECAT_ANDROID_KEY" lib/ | xargs sed -i "s/YOUR_REVENUECAT_ANDROID_KEY/$REVENUECAT_ANDROID_KEY/g" || true
+
+      - name: Get Flutter dependencies
+        script: flutter pub get
+
+      - name: Generate app icon
+        script: dart run flutter_launcher_icons
+
+      - name: Flutter analyze
+        script: flutter analyze --no-fatal-infos
+
+      - name: Build Android (release AAB)
+        script: |
+          flutter build appbundle --release
+
+    artifacts:
+      - build/app/outputs/bundle/release/*.aab
+      - build/app/outputs/mapping/release/mapping.txt
+
+    publishing:
+      google_play:
+        credentials: $GCLOUD_SERVICE_ACCOUNT_CREDENTIALS
+        track: internal

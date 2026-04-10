@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <!--
+        FamilyControls entitlement.
+        Xcode の Signing & Capabilities で "Family Controls" を追加すると
+        自動的にこのキーが設定されます。
+        App Store 提出前に Apple に申請が必要:
+        https://developer.apple.com/contact/request/family-controls-distribution
+    -->
+    <key>com.apple.developer.family-controls</key>
+    <true/>
+</dict>
+</plist>

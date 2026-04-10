@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>Lockin - 08 アプリ紹介</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;600;700;900&family=Noto+Serif+JP:ital,wght@1,400&display=swap" rel="stylesheet">
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  html, body { width:100%; height:100%; background:#111318; display:flex; justify-content:center; align-items:flex-start; overflow:hidden; }
+  #card {
+    width:390px; height:844px;
+    background: linear-gradient(160deg, #1A1F28 0%, #111318 40%, #0D1017 100%);
+    font-family:'Noto Sans JP','Hiragino Sans',sans-serif;
+    display:flex; flex-direction:column; align-items:center;
+    overflow:hidden; position:relative; flex-shrink:0; transform-origin:top center;
+  }
+
+  /* Background glow effects */
+  .glow1 {
+    position:absolute; width:400px; height:400px; border-radius:50%;
+    background:radial-gradient(circle, rgba(255,51,51,0.12) 0%, transparent 65%);
+    top:-100px; left:-80px; pointer-events:none;
+  }
+  .glow2 {
+    position:absolute; width:350px; height:350px; border-radius:50%;
+    background:radial-gradient(circle, rgba(74,158,255,0.10) 0%, transparent 65%);
+    bottom:-80px; right:-70px; pointer-events:none;
+  }
+  .glow3 {
+    position:absolute; width:200px; height:200px; border-radius:50%;
+    background:radial-gradient(circle, rgba(29,185,84,0.08) 0%, transparent 65%);
+    top:340px; right:30px; pointer-events:none;
+  }
+
+  /* Top area */
+  .top-section {
+    width:100%; display:flex; flex-direction:column; align-items:center;
+    padding-top:58px; z-index:2; position:relative;
+  }
+
+  /* App icon placeholder */
+  .app-icon-wrap {
+    width:72px; height:72px; border-radius:18px;
+    background: linear-gradient(135deg, #FF3333 0%, #CC0000 100%);
+    display:flex; align-items:center; justify-content:center;
+    box-shadow: 0 8px 24px rgba(255,51,51,0.35);
+    margin-bottom:14px;
+  }
+  .app-icon-letter {
+    font-size:36px; font-weight:900; color:#fff; letter-spacing:-1px;
+    font-family:'Noto Sans JP',sans-serif;
+  }
+
+  .app-name {
+    font-size:28px; font-weight:900; color:#F0F2F5; letter-spacing:4px;
+    margin-bottom:6px;
+  }
+
+  .tagline {
+    font-size:13px; color:#7B8494; letter-spacing:0.3px; text-align:center;
+    line-height:1.6; margin-bottom:32px; padding:0 30px;
+  }
+
+  /* Main claim */
+  .main-claim {
+    text-align:center; z-index:2; position:relative; margin-bottom:32px; padding:0 24px;
+  }
+  .mc-l1 { font-size:44px; font-weight:900; color:#F0F2F5; letter-spacing:-2px; display:block; line-height:1.1; }
+  .mc-l2 { font-size:44px; font-weight:900; color:#FF3333; letter-spacing:-2px; display:block; line-height:1.1; }
+
+  /* Feature list */
+  .feature-list {
+    width:100%; padding:0 28px; z-index:2; position:relative; flex:1;
+  }
+
+  .feat-item {
+    display:flex; align-items:flex-start; gap:14px; padding:14px 0;
+    border-bottom:1px solid rgba(46,52,64,0.6);
+  }
+  .feat-item:last-child { border-bottom:none; }
+
+  .feat-icon-wrap {
+    width:36px; height:36px; border-radius:10px;
+    display:flex; align-items:center; justify-content:center;
+    font-size:18px; flex-shrink:0; margin-top:1px;
+  }
+
+  .feat-text { flex:1; }
+  .feat-title { font-size:14px; font-weight:700; color:#F0F2F5; margin-bottom:3px; }
+  .feat-desc { font-size:11px; color:#7B8494; line-height:1.5; }
+
+  /* Bottom area */
+  .bottom-section {
+    width:100%; padding:0 28px 36px;
+    z-index:2; position:relative;
+    display:flex; flex-direction:column; align-items:center; gap:12px;
+  }
+
+  .download-btn {
+    width:100%; height:50px; border-radius:14px;
+    background: linear-gradient(135deg, #FF3333 0%, #CC1111 100%);
+    display:flex; align-items:center; justify-content:center;
+    font-size:16px; font-weight:700; color:#fff; letter-spacing:0.3px;
+    box-shadow:0 6px 20px rgba(255,51,51,0.30);
+  }
+
+  .free-note {
+    font-size:11px; color:#7B8494; text-align:center;
+  }
+</style>
+</head>
+<body>
+<div id="card">
+  <div class="glow1"></div>
+  <div class="glow2"></div>
+  <div class="glow3"></div>
+
+  <div class="top-section">
+    <div class="app-icon-wrap">
+      <span class="app-icon-letter">L</span>
+    </div>
+    <div class="app-name">LOCKIN</div>
+    <div class="tagline">ブロックして、本当の時間を取り戻す。</div>
+  </div>
+
+  <!-- Main headline -->
+  <div class="main-claim">
+    <span class="mc-l1">本当の時間を、</span>
+    <span class="mc-l2">取り戻そう 🌟</span>
+  </div>
+
+  <!-- Feature list -->
+  <div class="feature-list">
+    <div class="feat-item">
+      <div class="feat-icon-wrap" style="background:rgba(255,51,51,0.15);">⚡</div>
+      <div class="feat-text">
+        <div class="feat-title">3つのロックモード</div>
+        <div class="feat-desc">NOW / LIMIT / SCHEDULE — 場面に合わせて使い分ける</div>
+      </div>
+    </div>
+    <div class="feat-item">
+      <div class="feat-icon-wrap" style="background:rgba(74,158,255,0.15);">📊</div>
+      <div class="feat-text">
+        <div class="feat-title">スクリーンタイムの可視化</div>
+        <div class="feat-desc">アプリ別使用時間・週間レポートで習慣を把握</div>
+      </div>
+    </div>
+    <div class="feat-item">
+      <div class="feat-icon-wrap" style="background:rgba(255,179,0,0.15);">🔥</div>
+      <div class="feat-text">
+        <div class="feat-title">連続達成ストリーク</div>
+        <div class="feat-desc">目標をクリアするたびに積み上がる達成記録</div>
+      </div>
+    </div>
+    <div class="feat-item">
+      <div class="feat-icon-wrap" style="background:rgba(29,185,84,0.15);">✍️</div>
+      <div class="feat-text">
+        <div class="feat-title">100以上の名言</div>
+        <div class="feat-desc">ロック中に偉人の言葉が意志力をサポート</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bottom CTA -->
+  <div class="bottom-section">
+    <div class="download-btn">無料でダウンロード</div>
+    <div class="free-note">基本機能は無料 · LOCK+ で全機能解放</div>
+  </div>
+
+</div>
+<script>
+  const card = document.getElementById('card');
+  const scale = Math.min(window.innerWidth / 390, window.innerHeight / 844);
+  card.style.transform = 'scale(' + scale + ')';
+  if (window.innerHeight / 844 > window.innerWidth / 390) {
+    card.style.marginTop = ((window.innerHeight - 844 * scale) / 2) + 'px';
+  }
+</script>
+</body>
+</html>

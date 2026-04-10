@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>Lockin - 偉人の言葉が背中を押す。</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;600;700;900&family=Noto+Serif+JP:ital,wght@0,400;1,400&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body {
+    width: 100%; height: 100%;
+    background: #EAEEF2;
+    display: flex; justify-content: center; align-items: flex-start;
+    overflow: hidden;
+  }
+  #card {
+    width: 390px; height: 844px;
+    background: #EAEEF2;
+    font-family: 'Noto Sans JP', sans-serif;
+    display: flex; flex-direction: column; align-items: flex-start;
+    overflow: hidden; position: relative; flex-shrink: 0;
+    padding: 48px 28px 0;
+    transform-origin: top center;
+  }
+  .headline {
+    font-size: 40px; font-weight: 900; color: #111318;
+    letter-spacing: -2px; line-height: 1.12; white-space: pre-line;
+  }
+  .subtitle {
+    font-size: 14px; font-weight: 400; color: #7B8494;
+    margin-top: 10px; letter-spacing: 0.1px;
+  }
+  .phone-wrap {
+    margin-top: 26px; width: 100%; display: flex; justify-content: center;
+  }
+  .phone-outer {
+    width: 252px; height: 530px;
+    background: #fff; border-radius: 44px;
+    border: 7px solid #D0D5DD;
+    box-shadow: 0 28px 72px rgba(0,0,0,0.16), 0 8px 20px rgba(0,0,0,0.08);
+    overflow: hidden; display: flex; flex-direction: column;
+    flex-shrink: 0;
+  }
+  .dynamic-island {
+    width: 100px; height: 30px;
+    background: #111318; border-radius: 0 0 20px 20px;
+    margin: 0 auto; flex-shrink: 0;
+  }
+  .phone-screen {
+    background: #111318; flex: 1;
+    display: flex; flex-direction: column;
+    align-items: center; overflow: hidden;
+    padding: 16px 20px 18px; position: relative;
+  }
+
+  /* Ambient red glow at top */
+  .glow-top {
+    position: absolute; width: 220px; height: 180px;
+    background: radial-gradient(ellipse, rgba(255,51,51,0.08) 0%, transparent 70%);
+    top: 0; left: 50%; transform: translateX(-50%);
+    pointer-events: none;
+  }
+  /* Soft center glow behind quote */
+  .glow-center {
+    position: absolute; width: 200px; height: 200px;
+    background: radial-gradient(circle, rgba(255,51,51,0.05) 0%, transparent 65%);
+    top: 40%; left: 50%; transform: translate(-50%, -50%);
+    pointer-events: none;
+  }
+
+  /* LOCKING pill */
+  .locking-pill {
+    display: flex; align-items: center; gap: 7px;
+    background: rgba(255,51,51,0.14);
+    border: 1px solid rgba(255,51,51,0.35);
+    border-radius: 24px; padding: 6px 16px; z-index: 1;
+    margin-bottom: 20px;
+  }
+  .lock-dot {
+    width: 8px; height: 8px; background: #FF3333; border-radius: 50%;
+    animation: blink 1.4s ease-in-out infinite;
+  }
+  @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
+  .lock-text { font-size: 10px; font-weight: 700; color: #FF3333; letter-spacing: 2px; }
+
+  /* Timer */
+  .timer-digits {
+    font-size: 64px; font-weight: 700; color: #F0F2F5;
+    letter-spacing: -3px; line-height: 1;
+    font-variant-numeric: tabular-nums; z-index: 1;
+  }
+  .timer-label { font-size: 11px; color: #7B8494; margin-top: 7px; letter-spacing: 0.5px; z-index: 1; margin-bottom: 24px; }
+
+  /* Large quote area */
+  .quote-area {
+    width: 100%; background: #1C2027; border-radius: 14px;
+    padding: 18px 16px; z-index: 1; flex: 1; display: flex;
+    flex-direction: column; justify-content: center;
+    border-left: 3px solid rgba(255,51,51,0.4);
+  }
+  .quote-mark { font-size: 32px; color: rgba(255,51,51,0.3); line-height: 1; margin-bottom: 8px; font-family: serif; }
+  .quote-text {
+    font-family: 'Noto Serif JP', serif; font-style: italic;
+    font-size: 12px; color: #C8CDD6; line-height: 1.9;
+  }
+  .quote-author {
+    font-size: 11px; color: #7B8494; margin-top: 12px;
+    padding-top: 10px; border-top: 1px solid #2E3440;
+    text-align: right;
+  }
+
+  /* Bottom row */
+  .bottom-row {
+    display: flex; justify-content: flex-start; align-items: center;
+    width: 100%; z-index: 1; margin-top: 16px;
+  }
+  .stop-btn {
+    font-size: 10px; color: #7B8494;
+    border: 1px solid #2E3440; border-radius: 16px;
+    padding: 4px 14px; background: transparent;
+  }
+</style>
+</head>
+<body>
+<div id="card">
+  <div class="headline">偉人の言葉が&#10;背中を押す。</div>
+  <div class="subtitle">100以上の名言でブロックを続ける力に</div>
+  <div class="phone-wrap">
+    <div class="phone-outer">
+      <div class="dynamic-island"></div>
+      <div class="phone-screen">
+        <div class="glow-top"></div>
+        <div class="glow-center"></div>
+
+        <div class="locking-pill">
+          <div class="lock-dot"></div>
+          <div class="lock-text">LOCKING</div>
+        </div>
+
+        <div class="timer-digits">15:00</div>
+        <div class="timer-label">残り時間</div>
+
+        <div class="quote-area">
+          <div class="quote-mark">"</div>
+          <div class="quote-text">時間は最も平等に与えられ、<br>最も不平等に使われる。</div>
+          <div class="quote-author">— レフ・トルストイ</div>
+        </div>
+
+        <div class="bottom-row">
+          <div class="stop-btn">中断する</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+  const card = document.getElementById('card');
+  const scale = Math.min(window.innerWidth / 390, window.innerHeight / 844);
+  card.style.transform = 'scale(' + scale + ')';
+  if (window.innerHeight / 844 > window.innerWidth / 390) {
+    card.style.marginTop = ((window.innerHeight - 844 * scale) / 2) + 'px';
+  }
+</script>
+</body>
+</html>

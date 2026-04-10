@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>Lockin - 07 機能一覧</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;600;700;900&display=swap" rel="stylesheet">
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  html, body { width:100%; height:100%; background:#fff; display:flex; justify-content:center; align-items:flex-start; overflow:hidden; }
+  #card {
+    width:390px; height:844px; background:#FFFFFF;
+    font-family:'Noto Sans JP','Hiragino Sans',sans-serif;
+    display:flex; flex-direction:column; align-items:center;
+    overflow:hidden; position:relative; flex-shrink:0; transform-origin:top center;
+  }
+
+  /* LARGE HEADLINE — no pill, different layout */
+  .big-headline {
+    text-align:center; line-height:1.1; padding-top:42px; z-index:2; position:relative; width:100%;
+  }
+  .bh-l1 { font-size:52px; font-weight:900; color:#111318; letter-spacing:-2px; display:block; }
+  .bh-l2-wrap {
+    display:inline-block; background:#111318; border-radius:14px;
+    padding:4px 18px; margin-top:2px;
+  }
+  .bh-l2 { font-size:52px; font-weight:900; color:#FFFFFF; letter-spacing:-2px; display:block; }
+  .bh-l3 { font-size:30px; font-weight:900; color:#111318; letter-spacing:-1px; display:block; margin-top:4px; }
+
+  /* Two phones tilted */
+  .phones-area {
+    position:relative; width:100%; flex:1;
+    display:flex; justify-content:center; align-items:flex-start;
+    margin-top:16px;
+  }
+
+  .phone-base {
+    width:190px; height:400px; border-radius:32px;
+    border:6px solid #D0D5DD;
+    box-shadow:0 20px 50px rgba(0,0,0,0.16),0 4px 12px rgba(0,0,0,0.07);
+    overflow:hidden; display:flex; flex-direction:column;
+    position:absolute;
+  }
+
+  .phone-left {
+    transform:rotate(-8deg);
+    left:24px; top:10px;
+    z-index:1;
+  }
+
+  .phone-right {
+    transform:rotate(5deg);
+    right:14px; top:0px;
+    z-index:2;
+  }
+
+  .phone-center {
+    transform:rotate(0deg);
+    left:50%; top:-4px;
+    transform:translateX(-50%) rotate(0deg);
+    z-index:3;
+    width:200px; height:424px;
+    border-radius:36px; border:7px solid #C8CDD6;
+    box-shadow:0 28px 64px rgba(0,0,0,0.20),0 6px 16px rgba(0,0,0,0.10);
+  }
+
+  .notch { width:60px; height:20px; background:#111318; border-radius:0 0 12px 12px; margin:0 auto; flex-shrink:0; }
+  .notch-lg { width:66px; height:22px; background:#111318; border-radius:0 0 14px 14px; margin:0 auto; flex-shrink:0; }
+
+  /* LEFT PHONE — Home screen mini */
+  .ps-left { background:#111318; flex:1; padding:10px 10px; display:flex; flex-direction:column; gap:5px; }
+  .mini-stat-row { display:flex; gap:4px; }
+  .mini-stat { flex:1; background:#1C2027; border-radius:8px; padding:6px; text-align:center; }
+  .ms-val { font-size:13px; font-weight:700; color:#F0F2F5; }
+  .ms-lbl { font-size:7px; color:#7B8494; }
+  .mini-ring-row { display:flex; align-items:center; gap:6px; }
+  .mini-ring { width:36px; height:36px; flex-shrink:0; }
+  .mini-ring-info { flex:1; }
+  .mri-val { font-size:13px; font-weight:700; color:#FF3333; }
+  .mri-lbl { font-size:8px; color:#7B8494; }
+  .mini-btn { background:#FF3333; border-radius:8px; height:28px; display:flex; align-items:center; justify-content:center; font-size:10px; font-weight:700; color:#fff; }
+  .mini-app-row { display:flex; align-items:center; gap:5px; background:#1C2027; border-radius:7px; padding:5px 7px; }
+  .mini-app-icon { width:18px; height:18px; border-radius:5px; font-size:10px; display:flex; align-items:center; justify-content:center; }
+  .mini-app-nm { font-size:9px; font-weight:600; color:#F0F2F5; flex:1; }
+  .mini-app-bar { flex:1; height:3px; background:#252B34; border-radius:2px; }
+  .mini-app-fill { height:100%; border-radius:2px; }
+  .mini-app-t { font-size:9px; color:#7B8494; }
+
+  /* RIGHT PHONE — Stats screen mini */
+  .ps-right { background:#111318; flex:1; padding:10px 10px; display:flex; flex-direction:column; gap:5px; }
+  .mini-chart-card { background:#1C2027; border-radius:8px; padding:7px 8px; }
+  .mc-label { font-size:7px; color:#7B8494; margin-bottom:4px; }
+  .mini-bars { display:flex; align-items:flex-end; gap:3px; height:36px; }
+  .mb-col { flex:1; display:flex; flex-direction:column; align-items:center; gap:2px; justify-content:flex-end; }
+  .mb-bar { width:100%; border-radius:2px 2px 0 0; }
+  .mb-day { font-size:6px; color:#7B8494; }
+
+  /* CENTER PHONE — Block setup */
+  .ps-center { background:#111318; flex:1; padding:10px 12px; display:flex; flex-direction:column; gap:6px; }
+  .c-title { font-size:11px; font-weight:700; color:#F0F2F5; }
+  .c-sub { font-size:8px; color:#7B8494; }
+  .c-mode { background:#1C2027; border-radius:9px; padding:8px 10px; }
+  .cm-top { display:flex; align-items:center; gap:6px; }
+  .cm-icon { width:22px; height:22px; border-radius:6px; display:flex; align-items:center; justify-content:center; font-size:11px; }
+  .cm-name { font-size:10px; font-weight:700; color:#F0F2F5; flex:1; }
+  .cm-radio { width:13px; height:13px; border-radius:50%; border:2px solid #FF3333; display:flex; align-items:center; justify-content:center; }
+  .cm-radio.on { background:#FF3333; }
+  .cm-dot { width:4px; height:4px; border-radius:50%; background:#fff; }
+  .cm-desc { font-size:8px; color:#7B8494; margin-top:2px; }
+  .c-dur { margin-top:5px; padding-top:6px; border-top:1px solid #2E3440; }
+  .cd-lbl { font-size:8px; color:#7B8494; margin-bottom:4px; }
+  .cd-chips { display:flex; gap:3px; }
+  .cd-chip { padding:3px 6px; border-radius:5px; font-size:9px; background:#252B34; color:#7B8494; }
+  .cd-chip.on { background:rgba(255,51,51,0.2); color:#FF3333; border:1px solid rgba(255,51,51,0.4); }
+  .c-start { background:#FF3333; border-radius:9px; height:30px; display:flex; align-items:center; justify-content:center; font-size:10px; font-weight:700; color:#fff; margin-top:auto; }
+
+  /* Feature badges at bottom */
+  .feature-badges {
+    position:absolute; bottom:26px; left:0; right:0;
+    display:flex; justify-content:center; gap:8px; flex-wrap:wrap;
+    padding:0 20px; z-index:10;
+  }
+  .fb { background:#111318; border-radius:20px; padding:5px 12px; font-size:10px; font-weight:700; color:#F0F2F5; display:flex; align-items:center; gap:4px; }
+
+  .bg-c1 { position:absolute; width:300px; height:300px; border-radius:50%; background:radial-gradient(circle,rgba(74,158,255,0.06) 0%,transparent 70%); top:-50px; right:-80px; pointer-events:none; z-index:0; }
+  .bg-c2 { position:absolute; width:240px; height:240px; border-radius:50%; background:radial-gradient(circle,rgba(255,51,51,0.05) 0%,transparent 70%); bottom:60px; left:-60px; pointer-events:none; z-index:0; }
+</style>
+</head>
+<body>
+<div id="card">
+  <div class="bg-c1"></div>
+  <div class="bg-c2"></div>
+
+  <!-- BIG HEADLINE -->
+  <div class="big-headline">
+    <span class="bh-l1">スマホ依存を</span>
+    <span class="bh-l2-wrap"><span class="bh-l2">まるごと</span></span>
+    <span class="bh-l3">対策するアプリ 📱</span>
+  </div>
+
+  <!-- THREE PHONES -->
+  <div class="phones-area">
+
+    <!-- LEFT PHONE: Home -->
+    <div class="phone-base phone-left">
+      <div class="notch"></div>
+      <div class="ps-left">
+        <div style="font-size:10px;font-weight:700;color:#F0F2F5;margin-bottom:2px;">Lockin</div>
+        <div style="display:flex;align-items:center;justify-content:center;margin-bottom:4px;">
+          <svg width="56" height="56" viewBox="0 0 56 56" style="transform:rotate(-90deg)">
+            <circle cx="28" cy="28" r="22" fill="none" stroke="#252B34" stroke-width="6"/>
+            <circle cx="28" cy="28" r="22" fill="none" stroke="#FF3333" stroke-width="6" stroke-dasharray="83 55" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <div class="mini-stat-row">
+          <div class="mini-stat"><div class="ms-val" style="color:#1DB954;">12</div><div class="ms-lbl">連続日</div></div>
+          <div class="mini-stat"><div class="ms-val" style="color:#4A9EFF;">47回</div><div class="ms-lbl">ブロック</div></div>
+        </div>
+        <div class="mini-btn" style="margin-top:4px;">🔒 今すぐLOCK</div>
+        <div class="mini-app-row">
+          <div class="mini-app-icon" style="background:#E1306C;">📸</div>
+          <div class="mini-app-nm">Instagram</div>
+          <div class="mini-app-bar"><div class="mini-app-fill" style="width:70%;background:#FF3333;"></div></div>
+          <div class="mini-app-t">54m</div>
+        </div>
+        <div class="mini-app-row">
+          <div class="mini-app-icon" style="background:#111;">🎵</div>
+          <div class="mini-app-nm">TikTok</div>
+          <div class="mini-app-bar"><div class="mini-app-fill" style="width:45%;background:#FFB300;"></div></div>
+          <div class="mini-app-t">36m</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- RIGHT PHONE: Stats -->
+    <div class="phone-base phone-right">
+      <div class="notch"></div>
+      <div class="ps-right">
+        <div style="font-size:10px;font-weight:700;color:#F0F2F5;margin-bottom:4px;">週間レポート</div>
+        <div class="mini-chart-card">
+          <div class="mc-label">使用時間（時間）</div>
+          <div class="mini-bars">
+            <div class="mb-col"><div class="mb-bar" style="height:32px;background:#FF3333;opacity:0.75;"></div><div class="mb-day">月</div></div>
+            <div class="mb-col"><div class="mb-bar" style="height:22px;background:#FF3333;opacity:0.75;"></div><div class="mb-day">火</div></div>
+            <div class="mb-col"><div class="mb-bar" style="height:14px;background:#1DB954;"></div><div class="mb-day">水</div></div>
+            <div class="mb-col"><div class="mb-bar" style="height:16px;background:#1DB954;"></div><div class="mb-day">木</div></div>
+            <div class="mb-col"><div class="mb-bar" style="height:12px;background:#1DB954;"></div><div class="mb-day">金</div></div>
+            <div class="mb-col"><div class="mb-bar" style="height:28px;background:#FFB300;opacity:0.8;"></div><div class="mb-day">土</div></div>
+            <div class="mb-col"><div class="mb-bar" style="height:15px;background:#4A9EFF;"></div><div class="mb-day" style="color:#4A9EFF;">日</div></div>
+          </div>
+        </div>
+        <div class="mini-stat-row">
+          <div class="mini-stat"><div class="ms-val" style="color:#1DB954;font-size:11px;">−5.2h</div><div class="ms-lbl">先週比節約</div></div>
+          <div class="mini-stat"><div class="ms-val" style="font-size:11px;">47回</div><div class="ms-lbl">ブロック数</div></div>
+        </div>
+        <div style="font-size:8px;font-weight:600;color:#7B8494;margin-top:2px;">アプリ別</div>
+        <div style="display:flex;align-items:center;gap:5px;margin-top:3px;">
+          <div style="width:6px;height:6px;border-radius:50%;background:#E1306C;flex-shrink:0;"></div>
+          <div style="font-size:9px;color:#F0F2F5;flex:1;">Instagram</div>
+          <div style="width:50px;height:3px;background:#252B34;border-radius:2px;"><div style="width:85%;height:100%;background:#FF3333;border-radius:2px;"></div></div>
+          <div style="font-size:9px;color:#7B8494;">6.3h</div>
+        </div>
+        <div style="display:flex;align-items:center;gap:5px;margin-top:3px;">
+          <div style="width:6px;height:6px;border-radius:50%;background:#111;flex-shrink:0;"></div>
+          <div style="font-size:9px;color:#F0F2F5;flex:1;">TikTok</div>
+          <div style="width:50px;height:3px;background:#252B34;border-radius:2px;"><div style="width:60%;height:100%;background:#FFB300;border-radius:2px;"></div></div>
+          <div style="font-size:9px;color:#7B8494;">4.6h</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CENTER PHONE: Block modes -->
+    <div class="phone-base phone-center">
+      <div class="notch-lg"></div>
+      <div class="ps-center">
+        <div class="c-title">ロックモードを選択</div>
+        <div class="c-sub">目的に合わせて使い分けよう</div>
+
+        <div class="c-mode" style="border:1.5px solid rgba(255,51,51,0.45);">
+          <div class="cm-top">
+            <div class="cm-icon" style="background:rgba(255,51,51,0.2);">⚡</div>
+            <div class="cm-name">NOW LOCK</div>
+            <div class="cm-radio on"><div class="cm-dot"></div></div>
+          </div>
+          <div class="cm-desc">今すぐ指定時間ロック</div>
+          <div class="c-dur">
+            <div class="cd-lbl">ロック時間</div>
+            <div class="cd-chips">
+              <div class="cd-chip">15分</div>
+              <div class="cd-chip">30分</div>
+              <div class="cd-chip on">1時間</div>
+              <div class="cd-chip">2時間</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="c-mode">
+          <div class="cm-top">
+            <div class="cm-icon" style="background:rgba(167,139,250,0.2);">⏱</div>
+            <div class="cm-name">LIMIT LOCK</div>
+            <div class="cm-radio"></div>
+          </div>
+          <div class="cm-desc">1日の上限時間を設定</div>
+        </div>
+
+        <div class="c-mode">
+          <div class="cm-top">
+            <div class="cm-icon" style="background:rgba(74,158,255,0.2);">📅</div>
+            <div class="cm-name">SCHEDULE LOCK</div>
+            <div style="display:flex;align-items:center;gap:3px;">
+              <div style="font-size:7px;color:#4A9EFF;background:rgba(74,158,255,0.15);padding:1px 4px;border-radius:3px;">LOCK+</div>
+              <div class="cm-radio"></div>
+            </div>
+          </div>
+          <div class="cm-desc">曜日・時間で自動ロック</div>
+        </div>
+
+        <div class="c-start">🔒 LOCKを開始する</div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Feature badges at bottom -->
+  <div class="feature-badges">
+    <div class="fb">🔒 NOW LOCK</div>
+    <div class="fb">⏱ LIMIT LOCK</div>
+    <div class="fb">📅 SCHEDULE LOCK</div>
+    <div class="fb">📊 週間レポート</div>
+    <div class="fb">🔥 ストリーク</div>
+  </div>
+
+</div>
+<script>
+  const card = document.getElementById('card');
+  const scale = Math.min(window.innerWidth / 390, window.innerHeight / 844);
+  card.style.transform = 'scale(' + scale + ')';
+  if (window.innerHeight / 844 > window.innerWidth / 390) {
+    card.style.marginTop = ((window.innerHeight - 844 * scale) / 2) + 'px';
+  }
+</script>
+</body>
+</html>

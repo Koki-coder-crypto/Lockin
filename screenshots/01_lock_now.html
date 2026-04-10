@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>Lockin - 迷う前に、ブロック。</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;600;700;900&family=Noto+Serif+JP:ital,wght@0,400;1,400&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body {
+    width: 100%; height: 100%;
+    background: #EAEEF2;
+    display: flex; justify-content: center; align-items: flex-start;
+    overflow: hidden;
+  }
+  #card {
+    width: 390px; height: 844px;
+    background: #EAEEF2;
+    font-family: 'Noto Sans JP', sans-serif;
+    display: flex; flex-direction: column; align-items: flex-start;
+    overflow: hidden; position: relative; flex-shrink: 0;
+    padding: 48px 28px 0;
+    transform-origin: top center;
+  }
+  .headline {
+    font-size: 42px; font-weight: 900; color: #111318;
+    letter-spacing: -2px; line-height: 1.12; white-space: pre-line;
+  }
+  .subtitle {
+    font-size: 14px; font-weight: 400; color: #7B8494;
+    margin-top: 10px; letter-spacing: 0.1px;
+  }
+  .phone-wrap {
+    margin-top: 26px; width: 100%; display: flex; justify-content: center;
+  }
+  .phone-outer {
+    width: 252px; height: 530px;
+    background: #fff; border-radius: 44px;
+    border: 7px solid #D0D5DD;
+    box-shadow: 0 28px 72px rgba(0,0,0,0.16), 0 8px 20px rgba(0,0,0,0.08);
+    overflow: hidden; display: flex; flex-direction: column;
+    flex-shrink: 0;
+  }
+  .dynamic-island {
+    width: 100px; height: 30px;
+    background: #111318; border-radius: 0 0 20px 20px;
+    margin: 0 auto; flex-shrink: 0;
+  }
+  .phone-screen {
+    background: #111318; flex: 1;
+    display: flex; flex-direction: column;
+    align-items: center; position: relative;
+    overflow: hidden; padding: 16px 20px 20px;
+  }
+
+  /* Radial glow behind timer */
+  .glow-red {
+    position: absolute; width: 220px; height: 220px;
+    background: radial-gradient(circle, rgba(255,51,51,0.10) 0%, transparent 65%);
+    top: 50px; left: 50%; transform: translateX(-50%);
+    pointer-events: none;
+  }
+
+  /* LOCKING pill */
+  .locking-pill {
+    display: flex; align-items: center; gap: 7px;
+    background: rgba(255,51,51,0.14);
+    border: 1px solid rgba(255,51,51,0.35);
+    border-radius: 24px; padding: 6px 16px;
+    z-index: 1;
+  }
+  .lock-dot {
+    width: 8px; height: 8px; background: #FF3333; border-radius: 50%;
+    animation: blink 1.4s ease-in-out infinite;
+  }
+  @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
+  .lock-text { font-size: 10px; font-weight: 700; color: #FF3333; letter-spacing: 2px; }
+
+  /* Timer */
+  .timer-wrap {
+    flex: 1; display: flex; flex-direction: column;
+    align-items: center; justify-content: center; z-index: 1; width: 100%;
+    margin-top: -8px;
+  }
+  .timer-digits {
+    font-size: 72px; font-weight: 700; color: #F0F2F5;
+    letter-spacing: -4px; line-height: 1;
+    font-variant-numeric: tabular-nums;
+  }
+  .timer-label { font-size: 11px; color: #7B8494; margin-top: 7px; letter-spacing: 0.5px; }
+
+  /* Separator */
+  .sep { width: 56px; height: 1px; background: #2E3440; margin: 20px auto; }
+
+  /* Quote */
+  .quote-block { width: 100%; text-align: center; z-index: 1; }
+  .quote-text {
+    font-family: 'Noto Serif JP', serif; font-style: italic;
+    font-size: 11px; color: #7B8494; line-height: 1.8;
+  }
+  .quote-author {
+    font-size: 10px; color: #4A5568; margin-top: 9px; text-align: right;
+  }
+
+  /* Stop */
+  .stop-row {
+    display: flex; justify-content: flex-start; width: 100%; z-index: 1; margin-top: 16px;
+  }
+  .stop-btn {
+    font-size: 10px; color: #7B8494;
+    border: 1px solid #2E3440; border-radius: 16px; padding: 4px 14px;
+    background: transparent;
+  }
+</style>
+</head>
+<body>
+<div id="card">
+  <div class="headline">迷う前に、&#10;ブロック。</div>
+  <div class="subtitle">ワンタップで今すぐ集中モード</div>
+  <div class="phone-wrap">
+    <div class="phone-outer">
+      <div class="dynamic-island"></div>
+      <div class="phone-screen">
+        <div class="glow-red"></div>
+        <div class="locking-pill">
+          <div class="lock-dot"></div>
+          <div class="lock-text">LOCKING</div>
+        </div>
+        <div class="timer-wrap">
+          <div class="timer-digits">24:35</div>
+          <div class="timer-label">残り時間</div>
+          <div class="sep"></div>
+          <div class="quote-block">
+            <div class="quote-text">「集中とは、本質的でないことすべてに<br>ノーと言うことだ。」</div>
+            <div class="quote-author">— スティーブ・ジョブズ</div>
+          </div>
+        </div>
+        <div class="stop-row">
+          <div class="stop-btn">中断する</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+  const card = document.getElementById('card');
+  const scale = Math.min(window.innerWidth / 390, window.innerHeight / 844);
+  card.style.transform = 'scale(' + scale + ')';
+  if (window.innerHeight / 844 > window.innerWidth / 390) {
+    card.style.marginTop = ((window.innerHeight - 844 * scale) / 2) + 'px';
+  }
+</script>
+</body>
+</html>

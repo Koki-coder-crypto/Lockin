@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>Lockin - 3つのモードで自由に管理。</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;600;700;900&family=Noto+Serif+JP:ital,wght@0,400;1,400&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body {
+    width: 100%; height: 100%;
+    background: #EAEEF2;
+    display: flex; justify-content: center; align-items: flex-start;
+    overflow: hidden;
+  }
+  #card {
+    width: 390px; height: 844px;
+    background: #EAEEF2;
+    font-family: 'Noto Sans JP', sans-serif;
+    display: flex; flex-direction: column; align-items: flex-start;
+    overflow: hidden; position: relative; flex-shrink: 0;
+    padding: 48px 28px 0;
+    transform-origin: top center;
+  }
+  .headline {
+    font-size: 42px; font-weight: 900; color: #111318;
+    letter-spacing: -2px; line-height: 1.12; white-space: pre-line;
+  }
+  .subtitle {
+    font-size: 14px; font-weight: 400; color: #7B8494;
+    margin-top: 10px; letter-spacing: 0.1px;
+  }
+  .phone-wrap {
+    margin-top: 26px; width: 100%; display: flex; justify-content: center;
+  }
+  .phone-outer {
+    width: 252px; height: 530px;
+    background: #fff; border-radius: 44px;
+    border: 7px solid #D0D5DD;
+    box-shadow: 0 28px 72px rgba(0,0,0,0.16), 0 8px 20px rgba(0,0,0,0.08);
+    overflow: hidden; display: flex; flex-direction: column;
+    flex-shrink: 0;
+  }
+  .dynamic-island {
+    width: 100px; height: 30px;
+    background: #111318; border-radius: 0 0 20px 20px;
+    margin: 0 auto; flex-shrink: 0;
+  }
+  .phone-screen {
+    background: #111318; flex: 1;
+    display: flex; flex-direction: column;
+    position: relative; overflow: hidden;
+    padding: 14px 16px 16px;
+  }
+
+  /* Screen header */
+  .screen-title { font-size: 14px; font-weight: 700; color: #F0F2F5; margin-bottom: 4px; }
+  .screen-sub { font-size: 10px; color: #7B8494; margin-bottom: 14px; }
+
+  /* Mode card */
+  .mode-card {
+    background: #1C2027; border-radius: 12px;
+    border: 1.5px solid transparent;
+    padding: 11px 13px; margin-bottom: 8px;
+  }
+  .mode-card.selected {
+    border-color: rgba(255,51,51,0.5);
+    background: rgba(255,51,51,0.06);
+  }
+  .mode-row { display: flex; align-items: center; gap: 10px; }
+  .mode-icon-wrap {
+    width: 30px; height: 30px; border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 15px; flex-shrink: 0;
+  }
+  .mode-info { flex: 1; }
+  .mode-name { font-size: 11px; font-weight: 700; color: #F0F2F5; }
+  .mode-desc { font-size: 9px; color: #7B8494; margin-top: 2px; }
+  .radio-circle {
+    width: 16px; height: 16px; border-radius: 50%;
+    border: 2px solid #FF3333; flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .radio-circle.filled { background: #FF3333; }
+  .radio-dot { width: 6px; height: 6px; border-radius: 50%; background: #fff; }
+
+  /* Badges */
+  .plus-badge {
+    font-size: 8px; font-weight: 700; color: #4A9EFF;
+    background: rgba(74,158,255,0.15); border-radius: 4px; padding: 2px 6px;
+    margin-right: 4px;
+  }
+
+  /* Duration chips inside NOW card */
+  .dur-area { margin-top: 9px; padding-top: 8px; border-top: 1px solid #2E3440; }
+  .dur-label { font-size: 9px; color: #7B8494; margin-bottom: 6px; }
+  .chip-row { display: flex; gap: 5px; }
+  .chip {
+    padding: 3px 9px; border-radius: 6px; font-size: 10px; font-weight: 600;
+    background: #252B34; color: #7B8494;
+  }
+  .chip.active {
+    background: rgba(255,51,51,0.18); color: #FF3333;
+    border: 1px solid rgba(255,51,51,0.4);
+  }
+
+  /* CTA button */
+  .cta-btn {
+    margin-top: auto; background: #FF3333; border-radius: 12px;
+    height: 40px; display: flex; align-items: center; justify-content: center;
+    font-size: 12px; font-weight: 700; color: #fff; letter-spacing: 0.3px;
+  }
+
+  /* Bottom nav */
+  .bottom-nav {
+    background: #1C2027;
+    display: flex; justify-content: space-around; align-items: center;
+    padding: 8px 0 5px; flex-shrink: 0;
+  }
+  .nav-item { display: flex; flex-direction: column; align-items: center; gap: 2px; }
+  .nav-icon { font-size: 14px; }
+  .nav-txt { font-size: 8px; color: #7B8494; }
+  .nav-txt.active { color: #F0F2F5; font-weight: 600; }
+</style>
+</head>
+<body>
+<div id="card">
+  <div class="headline">3つのモードで&#10;自由に管理。</div>
+  <div class="subtitle">NOW・LIMIT・SCHEDULE</div>
+  <div class="phone-wrap">
+    <div class="phone-outer">
+      <div class="dynamic-island"></div>
+      <div class="phone-screen">
+        <div class="screen-title">ロックモードを選択</div>
+        <div class="screen-sub">目的に合わせて使い分けよう</div>
+
+        <!-- NOW LOCK (selected) -->
+        <div class="mode-card selected">
+          <div class="mode-row">
+            <div class="mode-icon-wrap" style="background:rgba(255,51,51,0.18);">⚡</div>
+            <div class="mode-info">
+              <div class="mode-name">NOW LOCK</div>
+              <div class="mode-desc">今すぐ指定時間ロック</div>
+            </div>
+            <div class="radio-circle filled"><div class="radio-dot"></div></div>
+          </div>
+          <div class="dur-area">
+            <div class="dur-label">ロック時間を選択</div>
+            <div class="chip-row">
+              <div class="chip">15分</div>
+              <div class="chip">30分</div>
+              <div class="chip active">1時間</div>
+              <div class="chip">2時間</div>
+              <div class="chip">∞</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- LIMIT LOCK -->
+        <div class="mode-card">
+          <div class="mode-row">
+            <div class="mode-icon-wrap" style="background:rgba(255,179,0,0.18);">📊</div>
+            <div class="mode-info">
+              <div class="mode-name">LIMIT LOCK</div>
+              <div class="mode-desc">1日の使用上限を設定</div>
+            </div>
+            <div class="radio-circle"></div>
+          </div>
+        </div>
+
+        <!-- SCHEDULE -->
+        <div class="mode-card">
+          <div class="mode-row">
+            <div class="mode-icon-wrap" style="background:rgba(74,158,255,0.18);">📅</div>
+            <div class="mode-info">
+              <div class="mode-name">SCHEDULE</div>
+              <div class="mode-desc">自動スケジュールロック</div>
+            </div>
+            <span class="plus-badge">LOCK+</span>
+            <div class="radio-circle"></div>
+          </div>
+        </div>
+
+        <div class="cta-btn">🔒 ロック開始</div>
+      </div>
+      <div class="bottom-nav">
+        <div class="nav-item"><div class="nav-icon">🏠</div><div class="nav-txt">ホーム</div></div>
+        <div class="nav-item"><div class="nav-icon">🔒</div><div class="nav-txt active">ブロック</div></div>
+        <div class="nav-item"><div class="nav-icon">📊</div><div class="nav-txt">記録</div></div>
+        <div class="nav-item"><div class="nav-icon">⚙️</div><div class="nav-txt">設定</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+  const card = document.getElementById('card');
+  const scale = Math.min(window.innerWidth / 390, window.innerHeight / 844);
+  card.style.transform = 'scale(' + scale + ')';
+  if (window.innerHeight / 844 > window.innerWidth / 390) {
+    card.style.marginTop = ((window.innerHeight - 844 * scale) / 2) + 'px';
+  }
+</script>
+</body>
+</html>

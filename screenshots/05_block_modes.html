@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>Lockin - 続けるほど、強くなる。</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;600;700;900&family=Noto+Serif+JP:ital,wght@0,400;1,400&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body {
+    width: 100%; height: 100%;
+    background: #EAEEF2;
+    display: flex; justify-content: center; align-items: flex-start;
+    overflow: hidden;
+  }
+  #card {
+    width: 390px; height: 844px;
+    background: #EAEEF2;
+    font-family: 'Noto Sans JP', sans-serif;
+    display: flex; flex-direction: column; align-items: flex-start;
+    overflow: hidden; position: relative; flex-shrink: 0;
+    padding: 48px 28px 0;
+    transform-origin: top center;
+  }
+  .headline {
+    font-size: 42px; font-weight: 900; color: #111318;
+    letter-spacing: -2px; line-height: 1.12; white-space: pre-line;
+  }
+  .subtitle {
+    font-size: 14px; font-weight: 400; color: #7B8494;
+    margin-top: 10px; letter-spacing: 0.1px;
+  }
+  .phone-wrap {
+    margin-top: 26px; width: 100%; display: flex; justify-content: center;
+  }
+  .phone-outer {
+    width: 252px; height: 530px;
+    background: #fff; border-radius: 44px;
+    border: 7px solid #D0D5DD;
+    box-shadow: 0 28px 72px rgba(0,0,0,0.16), 0 8px 20px rgba(0,0,0,0.08);
+    overflow: hidden; display: flex; flex-direction: column;
+    flex-shrink: 0;
+  }
+  .dynamic-island {
+    width: 100px; height: 30px;
+    background: #111318; border-radius: 0 0 20px 20px;
+    margin: 0 auto; flex-shrink: 0;
+  }
+  .phone-screen {
+    background: #111318; flex: 1;
+    display: flex; flex-direction: column;
+    align-items: center; overflow: hidden;
+    padding: 18px 20px 20px; position: relative;
+  }
+
+  /* Green glow */
+  .glow-green {
+    position: absolute; width: 200px; height: 200px;
+    background: radial-gradient(circle, rgba(29,185,84,0.12) 0%, transparent 65%);
+    top: 40px; left: 50%; transform: translateX(-50%);
+    pointer-events: none;
+  }
+
+  /* Checkmark circle */
+  .check-circle {
+    width: 80px; height: 80px; border-radius: 50%;
+    background: rgba(29,185,84,0.15);
+    border: 2.5px solid #1DB954;
+    display: flex; align-items: center; justify-content: center;
+    margin-bottom: 14px; z-index: 1;
+    font-size: 36px;
+  }
+
+  /* Achievement text */
+  .achieve-text { font-size: 24px; font-weight: 700; color: #1DB954; z-index: 1; margin-bottom: 6px; }
+  .achieve-time { font-size: 13px; color: #7B8494; z-index: 1; margin-bottom: 18px; }
+
+  /* Streak badge */
+  .streak-badge {
+    display: flex; align-items: center; gap: 8px;
+    background: rgba(255,179,0,0.12); border: 1px solid rgba(255,179,0,0.3);
+    border-radius: 20px; padding: 8px 18px; z-index: 1; margin-bottom: 18px;
+  }
+  .streak-icon { font-size: 18px; }
+  .streak-text { font-size: 13px; font-weight: 700; color: #FFB300; }
+
+  /* Quote card */
+  .quote-card {
+    width: 100%; background: #1C2027; border-radius: 12px;
+    padding: 12px 14px; z-index: 1; margin-bottom: 18px;
+    flex-shrink: 0;
+  }
+  .quote-text {
+    font-family: 'Noto Serif JP', serif; font-style: italic;
+    font-size: 10px; color: #7B8494; line-height: 1.8;
+  }
+  .quote-author { font-size: 9px; color: #4A5568; margin-top: 7px; text-align: right; }
+
+  /* Home button */
+  .home-btn {
+    width: 100%; height: 40px; background: #1DB954; border-radius: 12px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 12px; font-weight: 700; color: #fff; z-index: 1;
+  }
+</style>
+</head>
+<body>
+<div id="card">
+  <div class="headline">続けるほど、&#10;強くなる。</div>
+  <div class="subtitle">ストリークで習慣を可視化</div>
+  <div class="phone-wrap">
+    <div class="phone-outer">
+      <div class="dynamic-island"></div>
+      <div class="phone-screen">
+        <div class="glow-green"></div>
+
+        <div class="check-circle">✓</div>
+
+        <div class="achieve-text">達成！</div>
+        <div class="achieve-time">25分00秒</div>
+
+        <div class="streak-badge">
+          <div class="streak-icon">🔥</div>
+          <div class="streak-text">7日連続達成！</div>
+        </div>
+
+        <div class="quote-card">
+          <div class="quote-text">「習慣は最初は蜘蛛の糸のようで、<br>やがて鎖になる。」</div>
+          <div class="quote-author">— スペインのことわざ</div>
+        </div>
+
+        <div class="home-btn">ホームに戻る</div>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+  const card = document.getElementById('card');
+  const scale = Math.min(window.innerWidth / 390, window.innerHeight / 844);
+  card.style.transform = 'scale(' + scale + ')';
+  if (window.innerHeight / 844 > window.innerWidth / 390) {
+    card.style.marginTop = ((window.innerHeight - 844 * scale) / 2) + 'px';
+  }
+</script>
+</body>
+</html>

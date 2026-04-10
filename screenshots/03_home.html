@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>Lockin - 今日、何時間使いましたか？</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;600;700;900&family=Noto+Serif+JP:ital,wght@0,400;1,400&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body {
+    width: 100%; height: 100%;
+    background: #EAEEF2;
+    display: flex; justify-content: center; align-items: flex-start;
+    overflow: hidden;
+  }
+  #card {
+    width: 390px; height: 844px;
+    background: #EAEEF2;
+    font-family: 'Noto Sans JP', sans-serif;
+    display: flex; flex-direction: column; align-items: flex-start;
+    overflow: hidden; position: relative; flex-shrink: 0;
+    padding: 48px 28px 0;
+    transform-origin: top center;
+  }
+  .headline {
+    font-size: 40px; font-weight: 900; color: #111318;
+    letter-spacing: -2px; line-height: 1.12; white-space: pre-line;
+  }
+  .subtitle {
+    font-size: 14px; font-weight: 400; color: #7B8494;
+    margin-top: 10px; letter-spacing: 0.1px;
+  }
+  .phone-wrap {
+    margin-top: 26px; width: 100%; display: flex; justify-content: center;
+  }
+  .phone-outer {
+    width: 252px; height: 530px;
+    background: #fff; border-radius: 44px;
+    border: 7px solid #D0D5DD;
+    box-shadow: 0 28px 72px rgba(0,0,0,0.16), 0 8px 20px rgba(0,0,0,0.08);
+    overflow: hidden; display: flex; flex-direction: column;
+    flex-shrink: 0;
+  }
+  .dynamic-island {
+    width: 100px; height: 30px;
+    background: #111318; border-radius: 0 0 20px 20px;
+    margin: 0 auto; flex-shrink: 0;
+  }
+  .phone-screen {
+    background: #111318; flex: 1;
+    display: flex; flex-direction: column;
+    overflow: hidden; padding: 12px 14px 0;
+  }
+
+  /* Header */
+  .app-header {
+    display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px;
+  }
+  .app-name { font-size: 16px; font-weight: 700; color: #FF3333; letter-spacing: 0.5px; }
+  .streak-badge {
+    display: flex; align-items: center; gap: 4px;
+    background: rgba(255,179,0,0.15); border: 1px solid rgba(255,179,0,0.3);
+    border-radius: 8px; padding: 3px 9px;
+    font-size: 10px; font-weight: 700; color: #FFB300;
+  }
+
+  /* Ring area */
+  .ring-section {
+    display: flex; flex-direction: column; align-items: center; margin-bottom: 14px;
+  }
+  .ring-container {
+    position: relative; width: 110px; height: 110px;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .ring-svg {
+    position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+    transform: rotate(-90deg);
+  }
+  .ring-center { text-align: center; z-index: 1; }
+  .ring-time { font-size: 20px; font-weight: 700; color: #F0F2F5; letter-spacing: -0.5px; }
+  .ring-unit { font-size: 9px; color: #7B8494; margin-top: 2px; }
+  .ring-label { font-size: 10px; color: #7B8494; margin-top: 7px; }
+
+  /* LOCK button */
+  .lock-btn {
+    background: #FF3333; border-radius: 12px;
+    height: 40px; display: flex; align-items: center; justify-content: center;
+    font-size: 13px; font-weight: 700; color: #fff;
+    margin-bottom: 12px; letter-spacing: 0.3px;
+  }
+
+  /* Quote card */
+  .quote-card {
+    background: #1C2027; border-radius: 10px; padding: 10px 12px;
+    flex: 1; display: flex; flex-direction: column; justify-content: center;
+    min-height: 0;
+  }
+  .quote-text {
+    font-family: 'Noto Serif JP', serif; font-style: italic;
+    font-size: 10px; color: #7B8494; line-height: 1.8;
+  }
+  .quote-author { font-size: 9px; color: #4A5568; margin-top: 7px; text-align: right; }
+
+  /* Bottom nav */
+  .bottom-nav {
+    background: #1C2027;
+    display: flex; justify-content: space-around; align-items: center;
+    padding: 8px 0 5px; flex-shrink: 0;
+  }
+  .nav-item { display: flex; flex-direction: column; align-items: center; gap: 2px; }
+  .nav-icon { font-size: 14px; }
+  .nav-txt { font-size: 8px; color: #7B8494; }
+  .nav-txt.active { color: #F0F2F5; font-weight: 600; }
+</style>
+</head>
+<body>
+<div id="card">
+  <div class="headline">今日、何時間&#10;使いましたか？</div>
+  <div class="subtitle">リアルタイムで使用時間を把握</div>
+  <div class="phone-wrap">
+    <div class="phone-outer">
+      <div class="dynamic-island"></div>
+      <div class="phone-screen">
+        <div class="app-header">
+          <div class="app-name">Lockin</div>
+          <div class="streak-badge">🔥 7日</div>
+        </div>
+
+        <!-- Circular ring: 60% filled in green, circumference = 2*pi*46 ≈ 289 -->
+        <!-- 60% => 173.4, remaining => 115.6 -->
+        <div class="ring-section">
+          <div class="ring-container">
+            <svg class="ring-svg" viewBox="0 0 110 110">
+              <!-- Background track -->
+              <circle cx="55" cy="55" r="46" fill="none" stroke="#1C2027" stroke-width="10"/>
+              <!-- Green filled arc ~60% -->
+              <circle cx="55" cy="55" r="46" fill="none" stroke="#1DB954" stroke-width="10"
+                stroke-dasharray="173.4 115.6" stroke-linecap="round"/>
+            </svg>
+            <div class="ring-center">
+              <div class="ring-time">2h 22m</div>
+              <div class="ring-unit">今日</div>
+            </div>
+          </div>
+          <div class="ring-label">今日の使用時間</div>
+        </div>
+
+        <div class="lock-btn">🛡 今すぐ LOCK</div>
+
+        <div class="quote-card">
+          <div class="quote-text">「あなたがどこに時間を使うか、<br>それがあなたの優先順位だ。」</div>
+          <div class="quote-author">— ウォーレン・バフェット</div>
+        </div>
+      </div>
+      <div class="bottom-nav">
+        <div class="nav-item"><div class="nav-icon">🏠</div><div class="nav-txt active">ホーム</div></div>
+        <div class="nav-item"><div class="nav-icon">🔒</div><div class="nav-txt">ブロック</div></div>
+        <div class="nav-item"><div class="nav-icon">📊</div><div class="nav-txt">記録</div></div>
+        <div class="nav-item"><div class="nav-icon">⚙️</div><div class="nav-txt">設定</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+  const card = document.getElementById('card');
+  const scale = Math.min(window.innerWidth / 390, window.innerHeight / 844);
+  card.style.transform = 'scale(' + scale + ')';
+  if (window.innerHeight / 844 > window.innerWidth / 390) {
+    card.style.marginTop = ((window.innerHeight - 844 * scale) / 2) + 'px';
+  }
+</script>
+</body>
+</html>
