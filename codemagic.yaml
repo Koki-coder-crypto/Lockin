@@ -32,16 +32,27 @@ workflows:
       - name: Set build number
         script: |
           agvtool new-version -all $(($BUILD_NUMBER + 1))
-      - name: Build IPA
+      - name: Archive
         script: |
-          xcode-project build-ipa \
-            --project "$XCODE_PROJECT" \
-            --scheme "$XCODE_SCHEME"
+          xcodebuild \
+            -project "$XCODE_PROJECT" \
+            -scheme "$XCODE_SCHEME" \
+            -configuration Release \
+            -archivePath build/Lockin.xcarchive \
+            -allowProvisioningUpdates \
+            archive
+      - name: Export IPA
+        script: |
+          xcodebuild \
+            -exportArchive \
+            -archivePath build/Lockin.xcarchive \
+            -exportOptionsPlist ExportOptions.plist \
+            -exportPath build/ios/ipa \
+            -allowProvisioningUpdates
     artifacts:
       - build/ios/ipa/*.ipa
+      - build/Lockin.xcarchive
       - /tmp/xcodebuild_logs/*.log
-      - $HOME/Library/Developer/Xcode/DerivedData/**/Build/**/*.app
-      - $HOME/Library/Developer/Xcode/DerivedData/**/Build/**/*.dSYM
     publishing:
       app_store_connect:
         api_key: $APP_STORE_CONNECT_PRIVATE_KEY
