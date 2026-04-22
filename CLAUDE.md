@@ -5,25 +5,30 @@
 - **タグライン**: 「ロックして、本当の時間を取り戻す。」
 - **ジャンル**: スマホ依存対策・スクリーンタイム管理
 - **ターゲット**: スマホ依存を自覚している15〜35歳の日本人
-- **プラットフォーム**: iOS / Android（Flutter クロスプラットフォーム）
+- **プラットフォーム**: iOS 専用（SwiftUI ネイティブ）
 
 ---
 
 ## 技術スタック
 
 ```
-言語:           Dart（Flutter 3.x）
-状態管理:       Riverpod 2.x
-ルーティング:   go_router
-ローカルDB:     Isar
-課金:           purchases_flutter（RevenueCat）
-認証:           firebase_auth（Apple / Google サインイン）
-アニメーション: flutter_animate
-グラフ:         fl_chart
-iOS native:     FamilyControls / ManagedSettings / DeviceActivity（Swift, Platform Channel）
-Android native: AccessibilityService / UsageStatsManager（Kotlin, Platform Channel）
-CI/CD:          Codemagic
+言語:           Swift 5.9
+UI:             SwiftUI（iOS 17+ 前提）
+状態管理:       @StateObject / @EnvironmentObject / @AppStorage
+永続化:         AppStorage (UserDefaults) · 将来 SwiftData 検討
+課金:           StoreKit 2（RevenueCat は任意）
+ブロック:       FamilyControls / ManagedSettings / DeviceActivity
+グラフ:         Swift Charts
+アニメーション: SwiftUI Spring / PhaseAnimator / TimelineView / symbolEffect
+ハプティクス:   .sensoryFeedback
+プロジェクト:   XcodeGen（project.yml → .xcodeproj をCIで生成）
+CI/CD:          Codemagic（mac_mini_m2 インスタンス・macOS 不要）
 ```
+
+### プロジェクト生成の流れ
+ローカル Windows では `.xcodeproj` を持たず、`project.yml` のみを管理する。
+Codemagic の macOS ランナーが `brew install xcodegen` → `xcodegen generate` で
+`.xcodeproj` を生成し、`xcodebuild` でアーカイブ → TestFlight に配信する。
 
 ---
 
@@ -139,74 +144,72 @@ BLOCK+:   ¥480/月 or ¥3,800/年（7日無料トライアル）
 
 ## 実装フェーズ
 
-### Phase 1（MVP・5週間）
-- [ ] Flutterプロジェクト初期化
-- [ ] テーマ・カラー・フォント設定（app_theme.dart）
-- [ ] go_router ルーティング設定
-- [ ] 名言JSONデータ作成（quotes.json）
-- [ ] オンボーディング3画面
-- [ ] ペイウォール画面（RevenueCat接続）
-- [ ] ホーム画面
-- [ ] ブロック設定画面（NOW / LIMIT / SCHEDULE）
-- [ ] ブロック中全画面（タイマー＋名言）
-- [ ] 達成画面
-- [ ] iOS Platform Channel（FamilyControls / ManagedSettings）
-- [ ] Android Platform Channel（AccessibilityService / UsageStatsManager）
+### Phase 1（MVP・完了）
+- [x] XcodeGen + Codemagic 構成（Windows 完結ビルド）
+- [x] デザイントークン（Colors / Typography / Motion）
+- [x] AppState + @AppStorage 永続化
+- [x] 名言 JSON（100件以上・カテゴリ別）
+- [x] オンボーディング 4画面（Usage → Shock → Goal → Permission）
+- [x] ペイウォール（年/月/買い切り・シマーCTA）
+- [x] ホーム（グラデリング・LOCK ボタン・ストリーク・デイリー名言）
+- [x] ブロック設定（NOW / LIMIT / SCHEDULE・アプリ選択・Strict）
+- [x] ブロック中全画面（TimelineView 秒刻み・名言 60s 回転・長押し解除）
+- [x] 達成画面（成功ハプティクス・名言）
+- [x] 統計（Swift Charts 週次バー・ストリーク・ピックアップ）
+- [x] 設定（セクション・Lockin+ アップセル）
 
-### Phase 2（課金・リリース・3週間）
-- [ ] RevenueCat完全統合
-- [ ] インアップペイウォール3種
-- [ ] Strictモード・フリクションモード
-- [ ] 統計画面（fl_chart）
-- [ ] ストリーク実装
-- [ ] App Store / Google Play 申請
+### Phase 2（課金・リリース）
+- [ ] StoreKit 2 または RevenueCat 接続
+- [ ] 実際の FamilyControls Selection UI（FamilyActivityPicker）
+- [ ] ManagedSettings でのシールド適用
+- [ ] DeviceActivityMonitor Extension 追加
+- [ ] App Store 申請・FamilyControls エンタイトルメント承認
 
-### Phase 3（拡張・4週間）
-- [ ] 睡眠モード
-- [ ] アプリグループ
-- [ ] 通知ブロック
-- [ ] ウィジェット（iOS / Android）
-- [ ] 週次レポートPDF
+### Phase 3（拡張）
+- [ ] 睡眠モード自動ブロック
+- [ ] アプリグループ（再利用可能セット）
+- [ ] ウィジェット（WidgetKit・ロック画面）
+- [ ] 週次レポート PDF 書き出し
+- [ ] Live Activities（Dynamic Island）
 
 ---
 
 ## プロジェクト構成
 
 ```
-block_app/
-├── lib/
-│   ├── main.dart
-│   ├── app.dart
-│   ├── core/
-│   │   ├── theme/app_theme.dart        # カラー・フォント・コンポーネントスタイル
-│   │   ├── router/app_router.dart      # go_router設定
-│   │   ├── constants/app_constants.dart
-│   │   └── providers/                  # Riverpod グローバルプロバイダ
-│   ├── features/
-│   │   ├── onboarding/
-│   │   ├── home/
-│   │   ├── block/
-│   │   ├── stats/
-│   │   ├── settings/
-│   │   └── paywall/
-│   ├── data/
-│   │   ├── local/                      # Isar DB
-│   │   ├── models/
-│   │   └── repositories/
-│   └── platform/
-│       ├── ios/screen_time_channel.dart
-│       └── android/usage_stats_channel.dart
-├── assets/
-│   ├── data/quotes.json                # 名言データ
-│   └── fonts/
-├── ios/
-│   ├── Runner/
-│   └── BlockExtension/                 # DeviceActivityMonitor
-└── android/
-    └── app/src/main/kotlin/
-        ├── MainActivity.kt
-        ├── BlockingService.kt
-        └── AccessibilityBlocker.kt
+スクリーンタイム管理アプリ/
+├── project.yml                          # XcodeGen 定義（唯一の真実）
+├── codemagic.yaml                       # iOS TestFlight ワークフロー
+├── Lockin/
+│   ├── App/
+│   │   ├── LockinApp.swift              # @main
+│   │   ├── AppState.swift               # ObservableObject + @AppStorage
+│   │   └── RootView.swift               # Onboarding/MainTab 切替
+│   ├── Theme/
+│   │   ├── LockinColors.swift
+│   │   ├── LockinTypography.swift
+│   │   └── LockinMotion.swift
+│   ├── Components/
+│   │   ├── ProgressDots.swift
+│   │   ├── PrimaryButton.swift
+│   │   ├── UsageRing.swift
+│   │   └── QuoteCard.swift
+│   ├── Features/
+│   │   ├── Onboarding/                  # 4 screens
+│   │   ├── Home/
+│   │   ├── Paywall/
+│   │   ├── Block/                       # Setup / Active / Complete
+│   │   ├── Stats/
+│   │   └── Settings/
+│   ├── Data/
+│   │   ├── Quote.swift
+│   │   └── BlockSession.swift
+│   └── Resources/
+│       ├── Info.plist                   # XcodeGen が生成
+│       ├── Lockin.entitlements          # XcodeGen が生成
+│       ├── quotes.json
+│       └── Assets.xcassets/
+└── _archive_flutter/                    # 旧 Flutter 実装（参照用）
 ```
 
 ---
